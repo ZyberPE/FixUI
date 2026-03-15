@@ -1,0 +1,22 @@
+name: FixUI
+main: FixUI\Main
+version: 1.0.0
+api: 5.0.0
+author: ZyberPE
+
+depend:
+  - FormAPI
+
+commands:
+  fix:
+    description: Repair items using XP
+    usage: "/fix"
+    aliases: [repair]
+    permission: fixui.use
+
+permissions:
+  fixui.use:
+    default: true
+
+  fixui.bypass:
+    default: op
