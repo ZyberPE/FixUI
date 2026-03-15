@@ -23,7 +23,7 @@ class Main extends PluginBase{
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool{
 
         if(!$sender instanceof Player){
-            $sender->sendMessage("Run this in-game.");
+            $sender->sendMessage("Run this command in-game.");
             return true;
         }
 
@@ -49,15 +49,17 @@ class Main extends PluginBase{
         }
 
         $form = new CustomForm(function(Player $player, $data) use ($items){
+
             if($data === null){
                 return;
             }
 
-            $item = $items[$data[0]] ?? null;
+            $item = $items[$data[1]] ?? null;
 
             if($item !== null){
-                $this->confirmRepair($player, $item);
+                $this->confirmRepairForm($player, $item);
             }
+
         });
 
         $form->setTitle($this->color($this->getConfig()->getNested("form.title")));
@@ -67,15 +69,16 @@ class Main extends PluginBase{
         $player->sendForm($form);
     }
 
-    private function confirmRepair(Player $player, Item $item): void{
+    private function confirmRepairForm(Player $player, Item $item): void{
 
         $cost = $this->getConfig()->get("repair-cost-xp");
 
         if($player->hasPermission("fixui.bypass")){
+            $message = "&aItem: &f" . $item->getName() . "\n\n&aYou have bypass permission.\n&7Repair cost: &f0 XP";
             $cost = 0;
+        }else{
+            $message = "&aItem: &f" . $item->getName() . "\n\n&eRepair Cost: &a" . $cost . " XP Levels";
         }
-
-        $message = str_replace("{xp}", (string)$cost, $this->getConfig()->getNested("form.confirm-message"));
 
         $form = new SimpleForm(function(Player $player, $data) use ($item, $cost){
 
@@ -88,12 +91,13 @@ class Main extends PluginBase{
             }else{
                 $player->sendMessage($this->color($this->getConfig()->getNested("messages.cancelled")));
             }
+
         });
 
         $form->setTitle($this->color($this->getConfig()->getNested("form.confirm-title")));
         $form->setContent($this->color($message));
 
-        $form->addButton("&aConfirm");
+        $form->addButton("&aConfirm Repair");
         $form->addButton("&cCancel");
 
         $player->sendForm($form);
@@ -137,6 +141,7 @@ class Main extends PluginBase{
             if($item instanceof Durable && $item->getDamage() > 0){
                 $items[] = $item;
             }
+
         }
 
         return $items;
