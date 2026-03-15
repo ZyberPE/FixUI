@@ -1,0 +1,14 @@
+repair-cost-xp: 5
+
+form:
+  title: "&6Item Repair"
+  description: "&eSelect a damaged item to repair."
+
+  confirm-title: "&cConfirm Repair"
+  confirm-message: "&eRepair this item for &a{xp} XP levels?"
+
+messages:
+  no-items: "&cYou have no damaged items."
+  repaired: "&aItem repaired successfully!"
+  not-enough-xp: "&cYou do not have enough XP levels."
+  cancelled: "&cRepair cancelled."
